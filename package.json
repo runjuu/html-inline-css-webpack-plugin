@@ -1,0 +1,26 @@
+{
+  "name": "html-inline-css-webpack-plugin",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./build/index.js",
+  "scripts": {
+    "build": "rm -rf ./build && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Runjuu/html-inline-css-webpack-plugin.git"
+  },
+  "keywords": [],
+  "author": "Runjuu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Runjuu/html-inline-css-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/Runjuu/html-inline-css-webpack-plugin#readme",
+  "devDependencies": {
+    "@types/webpack": "^4.4.0",
+    "tslib": "^1.9.2",
+    "typescript": "^2.9.1",
+    "webpack": "^4.11.1"
+  }
+}
