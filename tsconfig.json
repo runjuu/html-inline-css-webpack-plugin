@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "outDir": "build/",
     "declaration": true,
     "target": "es5",
-    "module": "ES2015",
+    "module": "UMD",
     "sourceMap": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es2015", "es2016"],
