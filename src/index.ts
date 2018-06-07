@@ -18,7 +18,7 @@ export default class Plugin
 {
 
   static makeReg(fileName: string) {
-    return new RegExp(`<link[^>]+href=['"]${fileName}['"][^>]+(>|\\\\>|><\\/link>)`);
+    return new RegExp(`<link[^>]+href=['"]${fileName}['"][^>]+(>|\/>|><\/link>)`);
   }
 
   static getStyleString(modules: Module[]): string {
