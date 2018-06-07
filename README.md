@@ -5,7 +5,7 @@
 
 Convert external style sheet(`<link rel="stylesheet"/>`) to internal style sheet(`<style>...<style/>`).
 
-require [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) and [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
+Require [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) and [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 
 ## Install
 #### NPM
