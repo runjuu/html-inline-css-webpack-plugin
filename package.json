@@ -2,9 +2,10 @@
   "name": "html-inline-css-webpack-plugin",
   "version": "0.0.1",
   "description": "",
-  "main": "./build/index.js",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
-    "build": "rm -rf ./build && tsc"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,8 @@
   "homepage": "https://github.com/Runjuu/html-inline-css-webpack-plugin#readme",
   "devDependencies": {
     "@types/webpack": "^4.4.0",
+    "rollup": "^0.60.1",
+    "rollup-plugin-typescript2": "^0.14.0",
     "tslib": "^1.9.2",
     "typescript": "^2.9.1",
     "webpack": "^4.11.1"

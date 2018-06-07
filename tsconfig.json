@@ -2,8 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "target": "es5",
-    "module": "commonjs",
-    "outDir": "build/",
+    "module": "ES2015",
     "sourceMap": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es2015", "es2016"],
