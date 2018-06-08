@@ -1,7 +1,7 @@
 {
   "name": "html-inline-css-webpack-plugin",
-  "version": "0.1.2",
-  "description": "",
+  "version": "0.1.3",
+  "description": "A webpack plugin for convert external style sheet to internal style sheet",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Runjuu/html-inline-css-webpack-plugin.git"
   },
-  "keywords": [],
+  "keywords": ["webpack", "webpack4", "webpack-plugin", "inline", "inline-css", "inline-style", "internal-style", "internal-css", "css"],
   "author": "Runjuu",
   "license": "MIT",
   "bugs": {
