@@ -1,60 +1,74 @@
 import { Compiler } from 'webpack';
 
-interface Module {
-  type?: string
-  content: string
-}
+type File = {
+  [key: string]: string
+};
+
+type Asset = {
+  source(): string
+  size(): number
+};
 
 interface Compilation {
-  modules: Module[]
-}
-
-interface PluginData {
-  html: string
-  assets: { css: string[] }
+  assets: { [key: string]: Asset }
 }
 
 export default class Plugin
 {
-
-  static makeReg(fileName: string) {
-    return new RegExp(`<link[^>]+href=['"]${fileName}['"][^>]+(>|\/>|><\/link>)`);
+  static addStyle(html: string, style: string) {
+    return html.replace('</head>', `<style>${style}</style></head>`);
   }
 
-  static getStyleString(modules: Module[]): string {
-    return modules
-      .filter(({ type = '' }) => type.includes('mini-css-extract-plugin'))
-      .reduce((result, { content = '' }) => {
-        return result + content;
-      }, '');
+  static removeLinkTag(html: string, cssFileName: string) {
+    return html.replace(
+      new RegExp(`<link[^>]+href=['"]${cssFileName}['"][^>]+(>|\/>|><\/link>)`),
+      '',
+    );
   }
 
-  static addStyleInToHTML(compilation: Compilation, pluginData: PluginData) {
-    const style = this.getStyleString(compilation.modules);
-    pluginData.html = pluginData.html
-      .replace('</head>', `<style>\n${style}\n</style></head>`);
-  }
+  private css: File = {};
+  private html: File = {};
 
-  static removeLinkTag(pluginData: PluginData) {
-    pluginData.assets.css.forEach((fileName: string) => {
-      pluginData.html = pluginData.html
-        .replace(this.makeReg(fileName), '');
+  private prepare({ assets }: Compilation) {
+    const isCSS = is('css');
+    const isHTML = is('html');
+
+    Object.keys(assets).forEach((fileName) => {
+      if (isCSS(fileName)) {
+        this.css[fileName] = assets[fileName].source();
+        delete assets[fileName];
+      } else if (isHTML(fileName)) {
+        this.html[fileName] = assets[fileName].source();
+      }
     });
   }
 
-  static replace(compilation: Compilation, pluginData: PluginData, callback: (...args: any[]) => void) {
-    Plugin.removeLinkTag(pluginData);
-    Plugin.addStyleInToHTML(compilation, pluginData);
-    callback(null, pluginData);
+  private process({ assets }: Compilation) {
+    Object.keys(this.html).forEach((htmlFileName) => {
+      let html = this.html[htmlFileName];
+
+      Object.keys(this.css).forEach((key) => {
+        html = Plugin.addStyle(html, this.css[key]);
+        html = Plugin.removeLinkTag(html, key);
+      });
+
+      assets[htmlFileName] = {
+        source() { return html },
+        size() { return html.length },
+      };
+    });
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.compilation.tap('HtmlReplaceWebpackPlugin', (compilation: any) => {
-      compilation.hooks.htmlWebpackPluginAfterHtmlProcessing
-        .tapAsync(
-          'html-webpack-plugin-before-html-processing',
-          Plugin.replace.bind(Plugin, compilation)
-        );
+    compiler.hooks.emit.tapAsync('html-inline-css-webpack-plugin', (compilation: Compilation, callback: () => void) => {
+      this.prepare(compilation);
+      this.process(compilation);
+      callback();
     });
   }
+}
+
+function is(filenameExtension: string) {
+  const reg = new RegExp(`\.${filenameExtension}$`);
+  return (fileName: string) => reg.test(fileName);
 }
