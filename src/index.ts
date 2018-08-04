@@ -1,4 +1,4 @@
-import { Compiler } from 'webpack';
+import { Compiler, Configuration } from 'webpack';
 
 type File = {
   [key: string]: string
@@ -43,13 +43,14 @@ export default class Plugin
     });
   }
 
-  private process({ assets }: Compilation) {
+  private process({ assets }: Compilation, { output }: Configuration) {
+    const publicPath = (output && output.publicPath) || '';
     Object.keys(this.html).forEach((htmlFileName) => {
       let html = this.html[htmlFileName];
 
       Object.keys(this.css).forEach((key) => {
         html = Plugin.addStyle(html, this.css[key]);
-        html = Plugin.removeLinkTag(html, key);
+        html = Plugin.removeLinkTag(html, publicPath + key);
       });
 
       assets[htmlFileName] = {
@@ -62,7 +63,7 @@ export default class Plugin
   apply(compiler: Compiler) {
     compiler.hooks.emit.tapAsync('html-inline-css-webpack-plugin', (compilation: Compilation, callback: () => void) => {
       this.prepare(compilation);
-      this.process(compilation);
+      this.process(compilation, compiler.options);
       callback();
     });
   }
