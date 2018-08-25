@@ -45,3 +45,14 @@ module.exports = {
   }
 }
 ```
+
+## Config
+```typescript
+interface Config {
+  filter?(fileName: string): boolean
+}
+```
+
+### filter(optional)
+Return `true` to make current file internal, otherwise ignore current file.
+
