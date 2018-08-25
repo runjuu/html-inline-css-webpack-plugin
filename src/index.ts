@@ -13,6 +13,10 @@ interface Compilation {
   assets: { [key: string]: Asset }
 }
 
+interface Config {
+  filter?(fileName: string): boolean
+}
+
 export default class Plugin
 {
   static addStyle(html: string, style: string) {
@@ -26,8 +30,23 @@ export default class Plugin
     );
   }
 
+  private config: Config;
+
   private css: File = {};
+
   private html: File = {};
+
+  constructor(config: Config) {
+    this.config = config;
+  }
+
+  private filter(fileName: string): boolean {
+    if (typeof this.config.filter === 'function') {
+      return this.config.filter(fileName);
+    } else {
+      return true;
+    }
+  }
 
   private prepare({ assets }: Compilation) {
     const isCSS = is('css');
@@ -35,8 +54,11 @@ export default class Plugin
 
     Object.keys(assets).forEach((fileName) => {
       if (isCSS(fileName)) {
-        this.css[fileName] = assets[fileName].source();
-        delete assets[fileName];
+        const isCurrentFileNeedsToBeInlined = this.filter(fileName);
+        if (isCurrentFileNeedsToBeInlined) {
+          this.css[fileName] = assets[fileName].source();
+          delete assets[fileName];
+        }
       } else if (isHTML(fileName)) {
         this.html[fileName] = assets[fileName].source();
       }
