@@ -36,7 +36,7 @@ export default class Plugin
 
   private html: File = {};
 
-  constructor(config: Config) {
+  constructor(config: Config = {}) {
     this.config = config;
   }
 
