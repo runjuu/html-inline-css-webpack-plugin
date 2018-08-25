@@ -55,4 +55,13 @@ interface Config {
 
 ### filter(optional)
 Return `true` to make current file internal, otherwise ignore current file.
-
+##### example
+```typescript
+...
+    new HTMLInlineCSSWebpackPlugin({
+      filter(fileName) {
+        return fileName.includes('main');
+      },
+    }),
+...
+```
