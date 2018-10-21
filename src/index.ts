@@ -13,14 +13,32 @@ interface Compilation {
   assets: { [key: string]: Asset }
 }
 
+interface ReplaceConfig {
+  position?: 'before' | 'after'
+  removeTarget?: boolean
+  target: string
+}
+
 interface Config {
   filter?(fileName: string): boolean
+  replace?: ReplaceConfig
 }
+
+const DEFAULT_REPLACE_CONFIG: ReplaceConfig = {
+  target: '</head>'
+};
 
 export default class Plugin
 {
-  static addStyle(html: string, style: string) {
-    return html.replace('</head>', `<style>${style}</style></head>`);
+  static addStyle(html: string, style: string, replaceConfig: ReplaceConfig) {
+    const styleString = `<style>${style}</style>`;
+    const replaceValues = [styleString, replaceConfig.target];
+
+    if (replaceConfig.position === 'after') {
+      replaceValues.reverse()
+    }
+
+    return html.replace(replaceConfig.target, replaceValues.join(''));
   }
 
   static removeLinkTag(html: string, cssFileName: string) {
@@ -30,15 +48,17 @@ export default class Plugin
     );
   }
 
-  private config: Config;
+  static cleanUp(html: string, replaceConfig: ReplaceConfig) {
+    return replaceConfig.removeTarget
+      ? html.replace(replaceConfig.target, '')
+      : html;
+  }
 
   private css: File = {};
 
   private html: File = {};
 
-  constructor(config: Config = {}) {
-    this.config = config;
-  }
+  constructor(private readonly config: Config = {}) {}
 
   private filter(fileName: string): boolean {
     if (typeof this.config.filter === 'function') {
@@ -67,13 +87,17 @@ export default class Plugin
 
   private process({ assets }: Compilation, { output }: Configuration) {
     const publicPath = (output && output.publicPath) || '';
+    const { replace: replaceConfig = DEFAULT_REPLACE_CONFIG } = this.config;
+
     Object.keys(this.html).forEach((htmlFileName) => {
       let html = this.html[htmlFileName];
 
       Object.keys(this.css).forEach((key) => {
-        html = Plugin.addStyle(html, this.css[key]);
+        html = Plugin.addStyle(html, this.css[key], replaceConfig);
         html = Plugin.removeLinkTag(html, publicPath + key);
       });
+
+      html = Plugin.cleanUp(html, replaceConfig);
 
       assets[htmlFileName] = {
         source() { return html },
