@@ -3,7 +3,10 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Runjuu/html-inline-css-webpack-plugin/pulls)
 [![npm version](https://badge.fury.io/js/html-inline-css-webpack-plugin.svg)](https://badge.fury.io/js/html-inline-css-webpack-plugin)
 
-Convert external style sheet(`<link rel="stylesheet"/>`) to internal style sheet(`<style>...<style/>`).
+Convert external stylesheet to embedded stylesheet, aka document stylesheet.
+```
+<link rel="stylesheet" /> => <style>...<style/>
+```
 
 Require [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) and [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 
