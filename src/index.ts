@@ -31,7 +31,7 @@ const DEFAULT_REPLACE_CONFIG: ReplaceConfig = {
 export default class Plugin
 {
   static addStyle(html: string, style: string, replaceConfig: ReplaceConfig) {
-    const styleString = `<style>${style}</style>`;
+    const styleString = `<style type="text/css">${style}</style>`;
     const replaceValues = [styleString, replaceConfig.target];
 
     if (replaceConfig.position === 'after') {
