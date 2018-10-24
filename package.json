@@ -1,7 +1,7 @@
 {
   "name": "html-inline-css-webpack-plugin",
-  "version": "1.3.0",
-  "description": "A webpack plugin for convert external style sheet to internal style sheet",
+  "version": "1.3.2",
+  "description": "☄️ A webpack plugin for convert external stylesheet to embedded stylesheet, aka document stylesheet",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -16,11 +16,12 @@
     "webpack4",
     "webpack-plugin",
     "inline",
-    "inline-css",
-    "inline-style",
-    "internal-style",
-    "internal-css",
-    "css"
+    "internal",
+    "embedded",
+    "document",
+    "css",
+    "style",
+    "stylesheet"
   ],
   "author": "Runjuu",
   "license": "MIT",
