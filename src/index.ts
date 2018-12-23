@@ -43,7 +43,7 @@ export default class Plugin
 
   static removeLinkTag(html: string, cssFileName: string) {
     return html.replace(
-      new RegExp(`<link[^>]+href=['"]${cssFileName}['"][^>]+(>|\/>|><\/link>)`),
+      new RegExp('<link href="' + cssFileName + '\\?\\w+" rel="stylesheet">'),
       '',
     );
   }
