@@ -1,5 +1,5 @@
 {
-  "name": "html-inline-css-webpack-plugin",
+  "name": "html-inline-css-webpack-plugin-wdd",
   "version": "1.3.2",
   "description": "☄️ A webpack plugin for convert external stylesheet to embedded stylesheet, aka document stylesheet",
   "main": "./build/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Runjuu/html-inline-css-webpack-plugin.git"
+    "url": "git+https://github.com/wilddogdesign/html-inline-css-webpack-plugin.git"
   },
   "keywords": [
     "webpack",
@@ -26,9 +26,9 @@
   "author": "Runjuu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Runjuu/html-inline-css-webpack-plugin/issues"
+    "url": "https://github.com/wilddogdesign/html-inline-css-webpack-plugin/issues"
   },
-  "homepage": "https://github.com/Runjuu/html-inline-css-webpack-plugin#readme",
+  "homepage": "https://github.com/wilddogdesign/html-inline-css-webpack-plugin#readme",
   "devDependencies": {
     "@types/webpack": "^4.4.0",
     "tslib": "^1.9.2",

@@ -1,3 +1,5 @@
+# Fork of: https://github.com/Runjuu/html-inline-css-webpack-plugin
+
 # html-inline-css-webpack-plugin
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Runjuu/html-inline-css-webpack-plugin/pulls)
