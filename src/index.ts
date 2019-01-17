@@ -16,7 +16,8 @@ interface Compilation {
 interface ReplaceConfig {
   position?: 'before' | 'after'
   removeTarget?: boolean
-  target: string
+  target: string,
+  leaveCssFile?: boolean
 }
 
 interface Config {
@@ -71,13 +72,16 @@ export default class Plugin
   private prepare({ assets }: Compilation) {
     const isCSS = is('css');
     const isHTML = is('html');
+    const { replace: replaceConfig = DEFAULT_REPLACE_CONFIG } = this.config;
 
     Object.keys(assets).forEach((fileName) => {
       if (isCSS(fileName)) {
         const isCurrentFileNeedsToBeInlined = this.filter(fileName);
         if (isCurrentFileNeedsToBeInlined) {
           this.css[fileName] = assets[fileName].source();
-          delete assets[fileName];
+          if (!replaceConfig.leaveCssFile) {
+            delete assets[fileName]
+          }
         }
       } else if (isHTML(fileName)) {
         this.html[fileName] = assets[fileName].source();
