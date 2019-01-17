@@ -17,11 +17,11 @@ interface ReplaceConfig {
   position?: 'before' | 'after'
   removeTarget?: boolean
   target: string
-  leaveCssFile?: boolean
 }
 
 interface Config {
   filter?(fileName: string): boolean
+  leaveCSSFile?: boolean
   replace?: ReplaceConfig
 }
 
@@ -71,14 +71,14 @@ export default class Plugin {
   private prepare({ assets }: Compilation) {
     const isCSS = is('css')
     const isHTML = is('html')
-    const { replace: replaceConfig = DEFAULT_REPLACE_CONFIG } = this.config
+    const { leaveCSSFile } = this.config
 
     Object.keys(assets).forEach((fileName) => {
       if (isCSS(fileName)) {
         const isCurrentFileNeedsToBeInlined = this.filter(fileName)
         if (isCurrentFileNeedsToBeInlined) {
           this.css[fileName] = assets[fileName].source()
-          if (!replaceConfig.leaveCssFile) {
+          if (!leaveCSSFile) {
             delete assets[fileName]
           }
         }
