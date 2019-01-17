@@ -53,11 +53,11 @@ module.exports = {
 ```typescript
 interface Config {
   filter?(fileName: string): boolean
+  leaveCSSFile?: boolean
   replace?: {
     target: string
     position?: 'before' | 'after'
     removeTarget?: boolean
-    leaveCssFile?: boolean
   }
 }
 ```
@@ -78,13 +78,15 @@ Return `true` to make current file internal, otherwise ignore current file.
 ...
 ```
 
+### leaveCSSFile(optional)
+if `true`, it will leave CSS files where they are when inlining
+
 ### replace(optional)
 ```typescript
 replace?: {
   target: string
   position?: 'before' | 'after' // default is 'before'
   removeTarget?: boolean // default is false
-  leaveCssFile?: boolean // default is false
 }
 ```
 A config for customizing the location of injection, default will add internal style sheet before the `</head>`
@@ -94,8 +96,6 @@ A target for adding the internal style sheet
 Add internal style sheet `before`/`after` the `target`
 #### removeTarget(optional)
 if `true`, it will remove the `target` from the output HTML
-#### leaveCssFile(optional)
-if `true`, it will leave CSS files where they are when inlining
 
 ##### example
 ```html
