@@ -1,6 +1,8 @@
 /src
 tsconfig.json
+tslint.json
 rollup.config.js
+.prettierrc
 .rpt2_cache
 .idea
 yarn.lock
