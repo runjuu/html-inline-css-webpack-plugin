@@ -1,6 +1,7 @@
 # html-inline-css-webpack-plugin
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Runjuu/html-inline-css-webpack-plugin/pulls)
+[![Total downloads](https://img.shields.io/npm/dm/html-inline-css-webpack-plugin.svg)](https://www.npmjs.com/package/html-inline-css-webpack-plugin)
 [![npm version](https://badge.fury.io/js/html-inline-css-webpack-plugin.svg)](https://badge.fury.io/js/html-inline-css-webpack-plugin)
 
 Convert external stylesheet to embedded stylesheet, aka document stylesheet.
