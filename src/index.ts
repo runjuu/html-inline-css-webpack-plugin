@@ -1,10 +1,10 @@
 import { Compiler, Configuration } from 'webpack'
 
-type File = {
+interface File {
   [key: string]: string
 }
 
-type Asset = {
+interface Asset {
   source(): string
   size(): number
 }
