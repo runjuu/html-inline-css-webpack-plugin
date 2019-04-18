@@ -74,15 +74,15 @@ export default class Plugin {
     const { leaveCSSFile } = this.config
 
     Object.keys(assets).forEach((fileName) => {
-      if (this.isCurrentFileNeedsToBeInlined(fileName)) {
-        if (isCSS(fileName)) {
-          this.css[fileName] = assets[fileName].source()
-          if (!leaveCSSFile) {
-            delete assets[fileName]
-          }
-        } else if (isHTML(fileName)) {
-          this.html[fileName] = assets[fileName].source()
+      if (isCSS(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
+        this.css[fileName] = assets[fileName].source()
+        if (!leaveCSSFile) {
+          delete assets[fileName]
         }
+      }
+
+      if (isHTML(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
+        this.html[fileName] = assets[fileName].source()
       }
     })
   }
