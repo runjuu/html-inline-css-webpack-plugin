@@ -83,7 +83,10 @@ export default class Plugin {
           }
         }
       } else if (isHTML(fileName)) {
-        this.html[fileName] = assets[fileName].source()
+        const isCurrentFileNeedsToBeInlined = this.filter(fileName)
+        if (isCurrentFileNeedsToBeInlined) {
+          this.html[fileName] = assets[fileName].source()
+        }
       }
     })
   }
