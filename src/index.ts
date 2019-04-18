@@ -60,7 +60,7 @@ export default class Plugin {
 
   constructor(private readonly config: Config = {}) {}
 
-  private filter(fileName: string): boolean {
+  private isCurrentFileNeedsToBeInlined(fileName: string): boolean {
     if (typeof this.config.filter === 'function') {
       return this.config.filter(fileName)
     } else {
@@ -74,17 +74,13 @@ export default class Plugin {
     const { leaveCSSFile } = this.config
 
     Object.keys(assets).forEach((fileName) => {
-      if (isCSS(fileName)) {
-        const isCurrentFileNeedsToBeInlined = this.filter(fileName)
-        if (isCurrentFileNeedsToBeInlined) {
+      if (this.isCurrentFileNeedsToBeInlined(fileName)) {
+        if (isCSS(fileName)) {
           this.css[fileName] = assets[fileName].source()
           if (!leaveCSSFile) {
             delete assets[fileName]
           }
-        }
-      } else if (isHTML(fileName)) {
-        const isCurrentFileNeedsToBeInlined = this.filter(fileName)
-        if (isCurrentFileNeedsToBeInlined) {
+        } else if (isHTML(fileName)) {
           this.html[fileName] = assets[fileName].source()
         }
       }
