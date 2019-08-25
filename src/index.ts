@@ -1,4 +1,6 @@
-import { Compiler, Configuration } from 'webpack'
+import { SyncHook } from 'tapable'
+import { Compiler } from 'webpack'
+import { escapeRegExp } from 'lodash'
 
 interface File {
   [key: string]: string
@@ -11,6 +13,15 @@ interface Asset {
 
 interface Compilation {
   assets: { [key: string]: Asset }
+}
+
+interface HtmlWebpackPluginData {
+  html: string
+  outputName: string
+  assets: {
+    publicPath: string
+    css: string[]
+  }
 }
 
 interface ReplaceConfig {
@@ -59,9 +70,16 @@ export default class Plugin {
 
   private css: File = {}
 
-  private html: File = {}
-
   constructor(private readonly config: Config = {}) {}
+
+  private getCSSFile(cssLink: string, publicPath: string) {
+    // Link pattern: publicPath + fileName + '?' + hash
+    const fileName = cssLink
+      .replace(new RegExp(`^${escapeRegExp(publicPath)}`), '')
+      .replace(/\?.+$/g, '')
+
+    return this.css[fileName]
+  }
 
   private isCurrentFileNeedsToBeInlined(fileName: string): boolean {
     if (typeof this.config.filter === 'function') {
@@ -73,55 +91,55 @@ export default class Plugin {
 
   private prepare({ assets }: Compilation) {
     const isCSS = is('css')
-    const isHTML = is('html')
-    const { leaveCSSFile } = this.config
 
     Object.keys(assets).forEach((fileName) => {
       if (isCSS(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
         this.css[fileName] = assets[fileName].source()
-        if (!leaveCSSFile) {
+        if (!this.config.leaveCSSFile) {
           delete assets[fileName]
         }
       }
-
-      if (isHTML(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
-        this.html[fileName] = assets[fileName].source()
-      }
     })
   }
 
-  private process({ assets }: Compilation, { output }: Configuration) {
-    const publicPath = (output && output.publicPath) || ''
+  private process(data: HtmlWebpackPluginData) {
     const { replace: replaceConfig = DEFAULT_REPLACE_CONFIG } = this.config
 
-    Object.keys(this.html).forEach((htmlFileName) => {
-      let html = this.html[htmlFileName]
-
-      Object.keys(this.css).forEach((key) => {
-        html = Plugin.addStyle(html, this.css[key], replaceConfig)
-        html = Plugin.removeLinkTag(html, publicPath + key)
+    // check if current html needs to be inlined
+    if (this.isCurrentFileNeedsToBeInlined(data.outputName)) {
+      data.assets.css.forEach((cssLink) => {
+        data.html = Plugin.addStyle(
+          data.html,
+          this.getCSSFile(cssLink, data.assets.publicPath),
+          replaceConfig,
+        )
       })
 
-      html = Plugin.cleanUp(html, replaceConfig)
-
-      assets[htmlFileName] = {
-        source() {
-          return html
-        },
-        size() {
-          return html.length
-        },
-      }
-    })
+      data.html = Plugin.cleanUp(data.html, replaceConfig)
+      data.assets.css.length = 0 // prevent generate <link /> tag
+    }
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.emit.tapAsync(
+    compiler.hooks.compilation.tap(
       'html-inline-css-webpack-plugin',
-      (compilation: Compilation, callback: () => void) => {
-        this.prepare(compilation)
-        this.process(compilation, compiler.options)
-        callback()
+      (compilation) => {
+        if ('htmlWebpackPluginBeforeHtmlProcessing' in compilation.hooks) {
+          const hook: SyncHook<HtmlWebpackPluginData> =
+            // @ts-ignore Error:(130, 27) TS2339: Property 'htmlWebpackPluginBeforeHtmlProcessing' does not exist on type 'CompilationHooks'.
+            compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing
+          hook.tap(
+            'html-inline-css-webpack-plugin-html-webpack-plugin-before-html-processing',
+            (data: HtmlWebpackPluginData) => {
+              this.prepare(compilation)
+              this.process(data)
+            },
+          )
+        } else {
+          throw new Error(
+            '`html-webpack-plugin` should be ordered first before html-inline-css-webpack-plugin',
+          )
+        }
       },
     )
   }
