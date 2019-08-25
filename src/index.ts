@@ -36,17 +36,37 @@ interface Config {
   replace?: ReplaceConfig
 }
 
+interface ConfigOfAddStyle {
+  html: string
+  htmlFileName: string
+  style: string
+  replaceConfig: ReplaceConfig
+}
+
 const DEFAULT_REPLACE_CONFIG: ReplaceConfig = {
   target: '</head>',
 }
 
 export default class Plugin {
-  static addStyle(html: string, style: string, replaceConfig: ReplaceConfig) {
+  static addStyle({
+    html,
+    htmlFileName,
+    replaceConfig,
+    style,
+  }: ConfigOfAddStyle) {
     const styleString = `<style type="text/css">${style}</style>`
     const replaceValues = [styleString, replaceConfig.target]
 
     if (replaceConfig.position === 'after') {
       replaceValues.reverse()
+    }
+
+    if (html.indexOf(replaceConfig.target) === -1) {
+      throw new Error(
+        `Can not inject css style into "${htmlFileName}", as there is not replace target "${
+          replaceConfig.target
+        }"`,
+      )
     }
 
     return html.replace(replaceConfig.target, replaceValues.join(''))
@@ -108,11 +128,12 @@ export default class Plugin {
     // check if current html needs to be inlined
     if (this.isCurrentFileNeedsToBeInlined(data.outputName)) {
       data.assets.css.forEach((cssLink) => {
-        data.html = Plugin.addStyle(
-          data.html,
-          this.getCSSFile(cssLink, data.assets.publicPath),
+        data.html = Plugin.addStyle({
+          html: data.html,
+          htmlFileName: data.outputName,
+          style: this.getCSSFile(cssLink, data.assets.publicPath),
           replaceConfig,
-        )
+        })
       })
 
       data.html = Plugin.cleanUp(data.html, replaceConfig)
