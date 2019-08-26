@@ -62,3 +62,4 @@ typings/
 /.idea
 /.rpt2_cache
 /build
+.DS_Store
