@@ -67,7 +67,7 @@ interface Config {
 ```typescript
 filter?(fileName: string): boolean
 ```
-Return `true` to make current file internal, otherwise ignore current file.
+Return `true` to make current file internal, otherwise ignore current file. Include both css file and html file name.
 ##### example
 ```typescript
 ...
@@ -97,7 +97,7 @@ A target for adding the internal style sheet
 Add internal style sheet `before`/`after` the `target`
 #### removeTarget(optional)
 if `true`, it will remove the `target` from the output HTML
-
+> Please note that HTML comment is removed by default by the `html-webpack-plugin` in production mode. [#16](https://github.com/Runjuu/html-inline-css-webpack-plugin/issues/16#issuecomment-527884514)
 ##### example
 ```html
 <head>
