@@ -12,6 +12,7 @@ export const DEFAULT_REPLACE_CONFIG: ReplaceConfig = {
 
 export interface Config {
   filter?(fileName: string): boolean
+  exclude?(fileName: string): boolean
   leaveCSSFile?: boolean
   replace?: ReplaceConfig
 }

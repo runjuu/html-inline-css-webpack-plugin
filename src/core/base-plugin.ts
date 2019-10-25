@@ -21,11 +21,13 @@ export class BasePlugin {
 
   protected prepare({ assets }: Compilation) {
     Object.keys(assets).forEach((fileName) => {
-      if (isCSS(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
-        this.cssStyleCache[fileName] = assets[fileName].source()
+      if (isCSS(fileName) && !this.isCurrentFileNeedsToBeLinked(fileName)) {
+        if (isCSS(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
+          this.cssStyleCache[fileName] = assets[fileName].source()
 
-        if (!this.config.leaveCSSFile) {
-          delete assets[fileName]
+          if (!this.config.leaveCSSFile) {
+            delete assets[fileName]
+          }
         }
       }
     })
@@ -61,6 +63,14 @@ export class BasePlugin {
   protected isCurrentFileNeedsToBeInlined(fileName: string): boolean {
     if (typeof this.config.filter === 'function') {
       return this.config.filter(fileName)
+    } else {
+      return true
+    }
+  }
+
+  protected isCurrentFileNeedsToBeLinked(fileName: string): boolean {
+    if (typeof this.config.exclude === 'function') {
+      return this.config.exclude(fileName)
     } else {
       return true
     }
