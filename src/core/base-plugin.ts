@@ -75,7 +75,9 @@ export class BasePlugin {
     htmlFileName: string
     style: string
   }) {
-    const styleString = `<style type="text/css">${style}</style>`
+    const styleString = this.config.noStyleTag
+      ? style
+      : `<style type="text/css">${style}</style>`
     const replaceValues = [styleString, this.replaceConfig.target]
 
     if (this.replaceConfig.position === 'after') {
