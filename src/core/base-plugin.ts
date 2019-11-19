@@ -69,8 +69,8 @@ export class BasePlugin {
   }
 
   protected isCurrentFileNeedsToBeLinked(fileName: string): boolean {
-    if (typeof this.config.exclude === 'function') {
-      return this.config.exclude(fileName)
+    if (typeof this.config.ignore === 'function') {
+      return this.config.ignore(fileName)
     } else {
       return true
     }
