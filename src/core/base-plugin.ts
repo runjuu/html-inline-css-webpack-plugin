@@ -75,9 +75,26 @@ export class BasePlugin {
     htmlFileName: string
     style: string
   }) {
-    const styleString = this.config.noStyleTag
-      ? style
-      : `<style type="text/css">${style}</style>`
+    let attributesString = ''
+
+    if (this.config.attributes) {
+      if (
+        typeof this.config.attributes !== 'object' &&
+        this.config.attributes === null
+      ) {
+        throw new Error(
+          `Please provide a key/value object if intending to use the attributes option`,
+        )
+      }
+
+      Object.keys(this.config.attributes).map((key) => {
+        const value = this.config.attributes[key] || ''
+        attributesString += ` ${key}="${value}"`
+      })
+    }
+
+    const styleString = `<style${attributesString}>${style}</style>`
+
     const replaceValues = [styleString, this.replaceConfig.target]
 
     if (this.replaceConfig.position === 'after') {

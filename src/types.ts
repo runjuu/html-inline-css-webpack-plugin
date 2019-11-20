@@ -14,7 +14,7 @@ export interface Config {
   filter?(fileName: string): boolean
   leaveCSSFile?: boolean
   replace?: ReplaceConfig
-  noStyleTag?: boolean
+  attributes?: any
 }
 
 export interface FileCache {
