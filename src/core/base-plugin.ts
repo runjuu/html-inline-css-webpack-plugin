@@ -66,6 +66,27 @@ export class BasePlugin {
     }
   }
 
+  protected getAttributesString(config: Config): string {
+    if (config.attributes && typeof config.attributes === 'object') {
+      return (
+        ' ' +
+        Object.keys(config.attributes)
+          .map((key) => `${key}="${config.attributes![key] || ''}"`)
+          .join(' ')
+      )
+    }
+
+    if (config.attributes === undefined && config.attributes === null) {
+      throw new Error(
+        `Please provide a key/value object if intending to use the attributes option, not ${
+          config.attributes
+        }`,
+      )
+    }
+
+    return ''
+  }
+
   protected addStyle({
     html,
     htmlFileName,
@@ -75,25 +96,9 @@ export class BasePlugin {
     htmlFileName: string
     style: string
   }) {
-    let attributesString = ''
-
-    if (this.config.attributes) {
-      if (
-        typeof this.config.attributes !== 'object' &&
-        this.config.attributes === null
-      ) {
-        throw new Error(
-          `Please provide a key/value object if intending to use the attributes option`,
-        )
-      }
-
-      Object.keys(this.config.attributes).map((key) => {
-        const value = this.config.attributes[key] || ''
-        attributesString += ` ${key}="${value}"`
-      })
-    }
-
-    const styleString = `<style${attributesString}>${style}</style>`
+    const styleString = `<style${this.getAttributesString(
+      this.config,
+    )}>${style}</style>`
 
     const replaceValues = [styleString, this.replaceConfig.target]
 

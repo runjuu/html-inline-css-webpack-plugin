@@ -66,7 +66,7 @@ interface Config {
     position?: 'before' | 'after'
     removeTarget?: boolean
   }
-  attributes?: any
+  attributes?: { [name: string]: string }
 }
 ```
 
