@@ -25,7 +25,7 @@ yarn add html-inline-css-webpack-plugin -D
 ```js
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
+const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin");
 
 module.exports = {
   plugins: [
