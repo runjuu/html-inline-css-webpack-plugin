@@ -33,7 +33,7 @@ export class PluginForHtmlWebpackPluginV4 extends BasePlugin {
 
   private prepareCSSStyle(data: BeforeAssetTagGenerationData) {
     const [...cssAssets] = data.assets.css
-    cssAssets.forEach(cssLink => {
+    cssAssets.forEach((cssLink) => {
       if (this.isCurrentFileNeedsToBeInlined(cssLink)) {
         const style = this.getCSSStyle({
           cssLink,

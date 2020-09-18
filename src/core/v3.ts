@@ -18,7 +18,7 @@ export class PluginForHtmlWebpackPluginV3 extends BasePlugin {
     // check if current html needs to be inlined
     if (this.isCurrentFileNeedsToBeInlined(data.outputName)) {
       const [...cssAssets] = data.assets.css
-      cssAssets.forEach(cssLink => {
+      cssAssets.forEach((cssLink) => {
         const style = this.getCSSStyle({
           cssLink,
           publicPath: data.assets.publicPath,
