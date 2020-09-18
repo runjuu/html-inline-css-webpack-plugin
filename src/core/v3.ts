@@ -17,7 +17,8 @@ export class PluginForHtmlWebpackPluginV3 extends BasePlugin {
   private process(data: HtmlWebpackPluginData) {
     // check if current html needs to be inlined
     if (this.isCurrentFileNeedsToBeInlined(data.outputName)) {
-      data.assets.css.forEach((cssLink, index) => {
+      const [...cssAssets] = data.assets.css
+      cssAssets.forEach(cssLink => {
         const style = this.getCSSStyle({
           cssLink,
           publicPath: data.assets.publicPath,
@@ -30,8 +31,11 @@ export class PluginForHtmlWebpackPluginV3 extends BasePlugin {
             style: style,
           })
 
+          const cssLinkIndex = data.assets.css.indexOf(cssLink)
           // prevent generate <link /> tag
-          data.assets.css.splice(index, 1)
+          if (cssLinkIndex !== -1) {
+            data.assets.css.splice(cssLinkIndex, 1)
+          }
         }
       })
 

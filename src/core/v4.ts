@@ -32,7 +32,8 @@ export class PluginForHtmlWebpackPluginV4 extends BasePlugin {
   private cssStyleMap: Map<HTMLWebpackPlugin, CSSStyle[]> = new Map()
 
   private prepareCSSStyle(data: BeforeAssetTagGenerationData) {
-    data.assets.css.forEach((cssLink, index) => {
+    const [...cssAssets] = data.assets.css
+    cssAssets.forEach(cssLink => {
       if (this.isCurrentFileNeedsToBeInlined(cssLink)) {
         const style = this.getCSSStyle({
           cssLink,
@@ -45,9 +46,11 @@ export class PluginForHtmlWebpackPluginV4 extends BasePlugin {
           } else {
             this.cssStyleMap.set(data.plugin, [style])
           }
-
+          const cssLinkIndex = data.assets.css.indexOf(cssLink)
           // prevent generate <link /> tag
-          data.assets.css.splice(index, 1)
+          if (cssLinkIndex !== -1) {
+            data.assets.css.splice(cssLinkIndex, 1)
+          }
         }
       }
     })
