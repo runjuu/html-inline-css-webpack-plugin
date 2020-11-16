@@ -7,6 +7,6 @@ import {
 
 const isHTMLWebpackPluginV4 = 'getHooks' in HTMLWebpackPlugin
 
-export default (isHTMLWebpackPluginV4
+export default isHTMLWebpackPluginV4
   ? PluginForHtmlWebpackPluginV4
-  : PluginForHtmlWebpackPluginV3)
+  : PluginForHtmlWebpackPluginV3
