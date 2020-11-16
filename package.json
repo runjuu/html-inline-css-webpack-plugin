@@ -1,6 +1,6 @@
 {
   "name": "html-inline-css-webpack-plugin",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "☄️ A webpack plugin for convert external stylesheet to embedded stylesheet, aka document stylesheet",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -28,6 +28,7 @@
   "keywords": [
     "webpack",
     "webpack4",
+    "webpack5",
     "webpack-plugin",
     "inline",
     "internal",
