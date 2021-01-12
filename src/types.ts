@@ -4,6 +4,8 @@ export interface ReplaceConfig {
   target: string
 }
 
+export type StyleTagFactory = (params: { style: string }) => string
+
 export const TAP_KEY_PREFIX = 'html-inline-css-webpack-plugin'
 
 export const DEFAULT_REPLACE_CONFIG: ReplaceConfig = {
@@ -14,6 +16,7 @@ export interface Config {
   filter?(fileName: string): boolean
   leaveCSSFile?: boolean
   replace?: ReplaceConfig
+  styleTagFactory?: StyleTagFactory
 }
 
 export interface FileCache {

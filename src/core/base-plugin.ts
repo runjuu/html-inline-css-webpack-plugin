@@ -1,4 +1,9 @@
-import { Config, DEFAULT_REPLACE_CONFIG, FileCache } from '../types'
+import {
+  Config,
+  StyleTagFactory,
+  DEFAULT_REPLACE_CONFIG,
+  FileCache,
+} from '../types'
 import { isCSS, escapeRegExp } from '../utils'
 
 interface Asset {
@@ -15,6 +20,13 @@ export class BasePlugin {
 
   protected get replaceConfig() {
     return this.config.replace || DEFAULT_REPLACE_CONFIG
+  }
+
+  protected get styleTagFactory(): StyleTagFactory {
+    return (
+      this.config.styleTagFactory ||
+      (({ style }) => `<style type="text/css">${style}</style>`)
+    )
   }
 
   constructor(protected readonly config: Config = {}) {}
@@ -75,8 +87,10 @@ export class BasePlugin {
     htmlFileName: string
     style: string
   }) {
-    const styleString = `<style type="text/css">${style}</style>`
-    const replaceValues = [styleString, this.replaceConfig.target]
+    const replaceValues = [
+      this.styleTagFactory({ style }),
+      this.replaceConfig.target,
+    ]
 
     if (this.replaceConfig.position === 'after') {
       replaceValues.reverse()
