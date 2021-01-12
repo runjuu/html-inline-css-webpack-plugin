@@ -53,7 +53,8 @@ module.exports = {
 ## Config
 ```typescript
 interface Config {
-  filter?(fileName: string): boolean
+  filter?: (fileName: string) => boolean
+  styleTagFactory?: (params: { style: string }) => string
   leaveCSSFile?: boolean
   replace?: {
     target: string
@@ -65,15 +66,33 @@ interface Config {
 
 ### filter(optional)
 ```typescript
-filter?(fileName: string): boolean
+filter?: (fileName: string) => boolean
 ```
 Return `true` to make current file internal, otherwise ignore current file. Include both css file and html file name.
 ##### example
 ```typescript
 ...
+new HTMLInlineCSSWebpackPlugin({
+  filter(fileName) {
+    return fileName.includes('main');
+  },
+}),
+...
+```
+
+### styleTagFactory(optional)
+```typescript
+styleTagFactory?: (params: { style: string }) => string
+```
+
+Used to customize the style tag.
+
+##### example
+```typescript
+...
   new HTMLInlineCSSWebpackPlugin({
-    filter(fileName) {
-      return fileName.includes('main');
+    styleTagFactory({ style }) {
+      return `<style type="text/css">${style}</style>`;
     },
   }),
 ...
