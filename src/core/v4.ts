@@ -32,6 +32,11 @@ export class PluginForHtmlWebpackPluginV4 extends BasePlugin {
   private cssStyleMap: Map<HTMLWebpackPlugin, CSSStyle[]> = new Map()
 
   private prepareCSSStyle(data: BeforeAssetTagGenerationData) {
+    // `prepareCSSStyle` may be called more than once in webpack watch mode.
+    // https://github.com/Runjuu/html-inline-css-webpack-plugin/issues/30
+    // https://github.com/Runjuu/html-inline-css-webpack-plugin/issues/13
+    this.cssStyleMap.clear()
+
     const [...cssAssets] = data.assets.css
     cssAssets.forEach((cssLink) => {
       if (this.isCurrentFileNeedsToBeInlined(cssLink)) {
