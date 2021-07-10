@@ -97,9 +97,7 @@ export class BasePlugin {
     }
 
     if (html.indexOf(this.replaceConfig.target) === -1) {
-      throw new Error(
-        `Can not inject css style into "${htmlFileName}", as there is not replace target "${this.replaceConfig.target}"`,
-      )
+      return replaceValues.join('');
     }
 
     return html.replace(this.replaceConfig.target, replaceValues.join(''))
