@@ -1,3 +1,5 @@
+import type { Compilation } from 'webpack';
+
 import {
   Config,
   StyleTagFactory,
@@ -5,15 +7,6 @@ import {
   FileCache,
 } from '../types'
 import { isCSS, escapeRegExp } from '../utils'
-
-interface Asset {
-  source(): string
-  size(): number
-}
-
-interface Compilation {
-  assets: { [key: string]: Asset }
-}
 
 export class BasePlugin {
   protected cssStyleCache: FileCache = {}
@@ -34,7 +27,8 @@ export class BasePlugin {
   protected prepare({ assets }: Compilation) {
     Object.keys(assets).forEach((fileName) => {
       if (isCSS(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
-        this.cssStyleCache[fileName] = assets[fileName].source()
+        const source = assets[fileName].source()
+        this.cssStyleCache[fileName] = typeof source === 'string' ? source : source.toString()
 
         if (!this.config.leaveCSSFile) {
           delete assets[fileName]

@@ -1,5 +1,5 @@
-import { SyncHook } from 'tapable'
-import { Compiler } from 'webpack'
+import type { SyncHook } from 'tapable'
+import type { Compiler } from 'webpack'
 
 import { TAP_KEY_PREFIX } from '../types'
 import { BasePlugin } from './base-plugin'
@@ -48,9 +48,8 @@ export class PluginForHtmlWebpackPluginV3 extends BasePlugin {
       `${TAP_KEY_PREFIX}_compilation`,
       (compilation) => {
         if ('htmlWebpackPluginBeforeHtmlProcessing' in compilation.hooks) {
-          const hook: SyncHook<HtmlWebpackPluginData> =
-            // @ts-ignore Error:(130, 27) TS2339: Property 'htmlWebpackPluginBeforeHtmlProcessing' does not exist on type 'CompilationHooks'.
-            compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing
+          const hook = compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing as SyncHook<HtmlWebpackPluginData>
+
           hook.tap(
             `${TAP_KEY_PREFIX}_htmlWebpackPluginBeforeHtmlProcessing`,
             (data: HtmlWebpackPluginData) => {

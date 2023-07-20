@@ -1,5 +1,5 @@
-import { SyncHook } from 'tapable'
-import { Compiler } from 'webpack'
+import type { SyncHook } from 'tapable'
+import type { Compiler } from 'webpack'
 import HTMLWebpackPlugin = require('html-webpack-plugin')
 
 import { TAP_KEY_PREFIX } from '../types'

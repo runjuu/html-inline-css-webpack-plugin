@@ -45,23 +45,24 @@
   },
   "homepage": "https://github.com/Runjuu/html-inline-css-webpack-plugin#readme",
   "devDependencies": {
-    "@types/html-webpack-plugin": "^3.2.1",
-    "@types/lodash": "^4.14.137",
-    "@types/webpack": "^4.4.0",
-    "husky": "^1.3.1",
-    "lint-staged": "^8.1.0",
-    "prettier": "^1.15.3",
-    "tslint": "^5.12.1",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.4.2",
+    "html-webpack-plugin": "^5.5.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0",
+    "tapable": "^2.2.1",
+    "tslint": "^5.20.1",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-sonarts": "^1.8.0",
-    "typescript": "^3.2.2",
-    "webpack": "^4.11.1"
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2"
   },
   "peerDependencies": {
     "html-webpack-plugin": "^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "tslib": "^1.9.3"
+    "lodash": "^4.17.21",
+    "tslib": "^2.6.0"
   }
 }
