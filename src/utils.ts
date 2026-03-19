@@ -1,6 +1,6 @@
-import { escapeRegExp } from 'lodash'
-
-export { escapeRegExp }
+export function escapeRegExp(str: string): string {
+  return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
+}
 
 export function is(filenameExtension: string) {
   const reg = new RegExp(`\.${filenameExtension}$`)

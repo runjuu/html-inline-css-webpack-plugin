@@ -1,40 +1,40 @@
-import type { Compilation } from 'webpack';
+import type { Compilation } from 'webpack'
 
 import {
-  Config,
-  StyleTagFactory,
+  type Config,
+  type StyleTagFactory,
   DEFAULT_REPLACE_CONFIG,
-  FileCache,
+  type FileCache,
+  type ReplaceConfig,
 } from '../types'
 import { isCSS, escapeRegExp } from '../utils'
 
 export class BasePlugin {
+  private publicPathRegexMap = new Map<string, RegExp>()
+  protected readonly replaceConfig: ReplaceConfig
+  protected readonly styleTagFactory: StyleTagFactory
+
   protected cssStyleCache: FileCache = {}
 
-  protected get replaceConfig() {
-    return this.config.replace || DEFAULT_REPLACE_CONFIG
-  }
-
-  protected get styleTagFactory(): StyleTagFactory {
-    return (
-      this.config.styleTagFactory ||
+  constructor(protected readonly config: Config = {}) {
+    this.replaceConfig = config.replace || DEFAULT_REPLACE_CONFIG
+    this.styleTagFactory =
+      config.styleTagFactory ||
       (({ style }) => `<style type="text/css">${style}</style>`)
-    )
   }
-
-  constructor(protected readonly config: Config = {}) {}
 
   protected prepare({ assets }: Compilation) {
-    Object.keys(assets).forEach((fileName) => {
+    for (const fileName of Object.keys(assets)) {
       if (isCSS(fileName) && this.isCurrentFileNeedsToBeInlined(fileName)) {
         const source = assets[fileName].source()
-        this.cssStyleCache[fileName] = typeof source === 'string' ? source : source.toString()
+        this.cssStyleCache[fileName] =
+          typeof source === 'string' ? source : source.toString()
 
         if (!this.config.leaveCSSFile) {
           delete assets[fileName]
         }
       }
-    })
+    }
   }
 
   protected getCSSStyle({
@@ -44,10 +44,13 @@ export class BasePlugin {
     cssLink: string
     publicPath: string
   }): string | undefined {
+    let publicPathRegex = this.publicPathRegexMap.get(publicPath)
+    if (publicPathRegex === undefined) {
+      publicPathRegex = new RegExp(`^${escapeRegExp(publicPath)}`)
+      this.publicPathRegexMap.set(publicPath, publicPathRegex)
+    }
     // Link pattern: publicPath + fileName + '?' + hash
-    const fileName = cssLink
-      .replace(new RegExp(`^${escapeRegExp(publicPath)}`), '')
-      .replace(/\?.+$/g, '')
+    const fileName = cssLink.replace(publicPathRegex, '').replace(/\?.+$/g, '')
 
     if (this.isCurrentFileNeedsToBeInlined(fileName)) {
       const style = this.cssStyleCache[fileName]
@@ -90,13 +93,16 @@ export class BasePlugin {
       replaceValues.reverse()
     }
 
-    if (html.indexOf(this.replaceConfig.target) === -1) {
+    const replaced = html.replace(
+      this.replaceConfig.target,
+      replaceValues.join(''),
+    )
+    if (replaced === html) {
       throw new Error(
         `Can not inject css style into "${htmlFileName}", as there is not replace target "${this.replaceConfig.target}"`,
       )
     }
-
-    return html.replace(this.replaceConfig.target, replaceValues.join(''))
+    return replaced
   }
 
   protected cleanUp(html: string) {
