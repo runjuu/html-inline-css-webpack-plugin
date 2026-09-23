@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "build/",
     "declaration": true,
-    "target": "es5",
-    "module": "UMD",
+    "target": "es2015",
+    "module": "Node16",
     "sourceMap": true,
-    "lib": ["dom", "es2015", "es2016"],
+    "lib": ["dom", "esnext"],
+    "types": ["node"],
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node16",
     "noEmitHelpers": true,
     "importHelpers": true,
     "strict": true,
-    "downlevelIteration": true,
     "noImplicitReturns": true
   },
   "exclude": [

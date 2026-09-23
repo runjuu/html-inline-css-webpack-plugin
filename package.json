@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf ./build && tsc",
     "prettier": "prettier '@(src)/**/*.@(ts)' --write",
-    "lint": "tslint -p tsconfig.json --fix"
+    "lint": "oxlint"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   "lint-staged": {
     "*.{ts}": [
       "prettier --write",
-      "tslint -p tsconfig.json --fix",
+      "oxlint",
       "git add"
     ]
   },
@@ -45,24 +45,22 @@
   },
   "homepage": "https://github.com/Runjuu/html-inline-css-webpack-plugin#readme",
   "devDependencies": {
-    "@types/lodash": "^4.14.195",
-    "@types/node": "^20.4.2",
-    "html-webpack-plugin": "^5.5.3",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.3",
-    "prettier": "^3.0.0",
-    "tapable": "^2.2.1",
-    "tslint": "^5.20.1",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-sonarts": "^1.8.0",
-    "typescript": "^5.1.6",
-    "webpack": "^5.88.2"
+    "@types/lodash": "^4.17.25",
+    "@types/node": "^26.6.2",
+    "html-webpack-plugin": "^5.6.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "oxlint": "^1.85.0",
+    "prettier": "^3.9.8",
+    "tapable": "^2.3.3",
+    "typescript": "^7.0.2",
+    "webpack": "^5.111.1"
   },
   "peerDependencies": {
     "html-webpack-plugin": "^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "tslib": "^2.6.0"
+    "lodash": "^4.18.1",
+    "tslib": "^2.8.1"
   }
 }

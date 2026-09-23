@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "no-console": ["error", { "allow": ["log", "time", "trace", "error"] }],
+    "no-redeclare": "error",
+    "no-throw-literal": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "eqeqeq": ["error", "always", { "null": "ignore" }]
+  }
+}
